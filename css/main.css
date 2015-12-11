@@ -1,0 +1,133 @@
+html{
+    font-size: 100%;
+}
+
+body{
+    margin: 0;
+    background: #0a4175;
+    font-family: 'arial',sans-serif;
+    font-size: 1.2rem;
+}
+
+.clearfix:after{
+    display: block;
+    content: '';
+    clear: both;
+}
+
+.container{
+    background: #fff;
+    max-width: 480px;
+    min-height:800px; 
+    margin: 0 auto;
+    padding-bottom: 10px;
+    position: relative; 
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
+}
+
+.fetch-form{
+    padding: 15px;
+    background: #5497d5
+}
+
+.fetch-input{
+    width: 80%;
+    margin: 0;
+    padding: 10px;
+    border: 0;
+    color: #404040;
+    font-size: 1.2rem;
+}
+
+.fetch-btn{
+    width: 20%;  
+    background: #0a4175;
+    color:#fff;
+    text-transform: uppercase;
+    font-weight: bolder;
+    border: none;
+    padding: 10px 0;
+    font-size: 1.2rem;
+}
+
+.fetch-btn:hover, .fetch-btn:focus{
+    background: #1e5f9d;
+}
+
+.fetch-message{
+    padding: 15px;
+    text-align: center;
+    color: #0a4175;
+}
+
+.fetch-title{
+    font-size: 2rem;
+    font-weight: bold;  
+    line-height: 3rem
+}
+
+.users-list{
+    margin-bottom: 15px 
+}
+
+.user-ticket{
+    position: relative;
+    margin:0 15px 15px;
+    height: 120px;
+    background: #5497d5;
+    padding: 10px;
+}
+.user-avatar{
+    height: 100%;  
+    float: left;
+}
+
+.user-data{
+    color: #fff; 
+    float: left;
+    margin-left: 10px;
+    line-height: 1.5rem;
+}
+
+button{
+    border:0;
+    background: #fff;
+    float: right;
+    font-size: 1.5rem; 
+    cursor: pointer;
+}
+
+.like-button{
+    padding: 0;
+}
+
+.icon{
+    padding: 5px;
+}
+
+.unlike{
+    color:#e3a1ad;
+}
+
+.like{
+    color:#eb3455;
+}
+
+.error-message{
+    position: relative;
+    margin:15px;
+    margin-top:10px; 
+    padding: 10px;
+    background: #eb3455;
+    color: #fff;
+    line-height: 2rem;    
+}
+
+.close-button{
+    padding:  0 3px;  
+    color: #404040
+}
+
+.close-button:hover, .close-button:focus {
+    color: #eb3455;
+}
