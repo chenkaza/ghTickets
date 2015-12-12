@@ -12,7 +12,7 @@
         vnode,
         data = [],
         error = false,
-		fetchCb = function(json){
+        fetchCb = function(json){
 			if(json.message == "Not Found") {
 				error = true;
 			} else{
@@ -39,9 +39,6 @@
 			query.value = "";
             e.preventDefault();
         },
-		toggleLike = function(e){
-			e.target.classList.toggle('like');
-		},
         removeTicket = function(e){
             var tormTicket = e.target.parentNode.value,
                 ticketIndex;
@@ -53,14 +50,7 @@
             data.splice(ticketIndex , 1);
             render();
         },
-		removeErrormsg = function(){
-			error = false;
-			render();
-		},
-		writeInput = function(e){
-            document.querySelector('.query-name').innerHTML = e.target.value;
-		},
-		viewTicket = function(ticket){
+        viewTicket = function(ticket){
             var result = h('li.user-ticket',{
                                 style: {opacity: '0', transition: 'opacity 0.5s',delayed: {opacity: '1'}}
                                 }, [
@@ -82,7 +72,31 @@
                          ]);
             return result;
 		},
-		viewError = function(){
+        viewList = function(){
+            var result = [
+                h('form.fetch-form', [
+                    h('input.fetch-input', {
+                        on: { input: writeInput },
+                        props: { type: 'text', placeholder: 'Enter a gitHub username...' }
+                    }),
+                    h('button.fetch-btn', {
+                        on: { click: fetchUser }
+                    }, 'Fetch!')
+                ]),
+                h('div.fetch-message', [
+                    h('h2.fetch-title', 'Hold tight!'),
+                    h('span', 'We are about to fetch '),
+                    h('span.query-name')
+                ]),
+                h('ul.users-list', data.map(viewTicket))
+            ];
+            return result;
+        },
+        removeErrormsg = function(){
+			error = false;
+			render();
+		},
+        viewError = function(){
 			var result = [
                     h('form.fetch-form', [
                         h('input.fetch-input', {
@@ -110,34 +124,20 @@
                 ];
 			return result;
         },
-        viewList = function(){
-            var result = [
-                h('form.fetch-form', [
-                    h('input.fetch-input', {
-                        on: { input: writeInput },
-                        props: { type: 'text', placeholder: 'Enter a gitHub username...' }
-                    }),
-                    h('button.fetch-btn', {
-                        on: { click: fetchUser }
-                    }, 'Fetch!')
-                ]),
-                h('div.fetch-message', [
-                    h('h2.fetch-title', 'Hold tight!'),
-                    h('span', 'We are about to fetch '),
-                    h('span.query-name')
-                ]),
-                h('ul.users-list', data.map(viewTicket))
-            ];
-            return result;
-        },
         view = function (data) {
             return h('section.container', error ? viewError(data) : viewList(data));
         },
         render = function() {
             localStorage.setItem('data' , JSON.stringify(data));
             vnode = patch(vnode, view(data));
-        }
-
+        },
+        writeInput = function(e){
+            document.querySelector('.query-name').innerHTML = e.target.value;
+		},
+		toggleLike = function(e){
+			e.target.classList.toggle('like');
+		};
+    
     window.addEventListener('DOMContentLoaded', function () {
         data = JSON.parse(localStorage.getItem('data')) || [];
         var container = document.querySelector('.container');
