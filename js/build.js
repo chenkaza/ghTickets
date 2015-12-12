@@ -139,7 +139,7 @@
         }
 
     window.addEventListener('DOMContentLoaded', function () {
-        data = JSON.parse(localStorage.getItem('data')) || {};
+        data = JSON.parse(localStorage.getItem('data')) || [];
         var container = document.querySelector('.container');
         vnode = patch(container, view(data));
         render();
