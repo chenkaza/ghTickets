@@ -66,8 +66,8 @@
                                 }, [
                             h('img.user-avatar', {props: {src: ticket.imgsrc}}),
                             h('ul.user-data', [
-                                h('li.user-detail', 'User-Name:' + ticket.user),
-                                h('li.user-detail', 'Public Repositories:' + ticket.repos),
+                                h('li.user-detail', 'User-Name: ' + ticket.user),
+                                h('li.user-detail', 'Public Repositories: ' + ticket.repos),
                                 h('li.user-detail', [
                                     h('a.user-link', {props: {href: ticket.url, target: '_blank'}}, 'Checkout User')
                                 ]),  
