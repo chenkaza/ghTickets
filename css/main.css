@@ -193,3 +193,9 @@ button{
         font-size: 62.5%;
     }
 }
+
+@media screen and (max-width:380px){
+    html{
+        font-size: 50%;
+    }
+}
