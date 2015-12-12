@@ -37,6 +37,7 @@ body{
     border: 0;
     color: #404040;
     font-size: 1.2rem;
+    outline-color: #0a4175;
 }
 
 .fetch-btn{
@@ -44,14 +45,14 @@ body{
     background: #0a4175;
     color:#fff;
     text-transform: uppercase;
-    font-weight: bolder;
+    font-weight: bold;
     border: none;
     padding: 10px 0;
     font-size: 1.2rem;
 }
 
 .fetch-btn:hover, .fetch-btn:focus{
-    background: #1e5f9d;
+    background: #eb3455;
 }
 
 .fetch-message{
@@ -76,6 +77,7 @@ body{
     height: 120px;
     background: #5497d5;
     padding: 10px;
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
 }
 .user-avatar{
     height: 100%;  
@@ -86,7 +88,26 @@ body{
     color: #fff; 
     float: left;
     margin-left: 10px;
-    line-height: 1.5rem;
+}
+
+.user-detail{
+    margin-bottom: 1rem   
+}
+
+.user-link{
+    display: block;
+    width: 90%;
+    background: #fff;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #0a4175;
+    font-weight: bold;
+    transition: all 0.2s;
+    outline: 0;
+}
+
+.user-link:hover , .user-link:focus{
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.4);  
 }
 
 button{
@@ -95,22 +116,42 @@ button{
     float: right;
     font-size: 1.5rem; 
     cursor: pointer;
+    outline: 0;
+    transition: all 0.2s;
 }
 
 .like-button{
     padding: 0;
+    color:rgba(235, 52, 85, 0.5);
 }
 
-.icon{
-    padding: 5px;
-}
-
-.unlike{
-    color:#e3a1ad;
+.like-button:hover , .like-button:focus{
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.4);  
 }
 
 .like{
     color:#eb3455;
+    transition: all 0.5s;
+}
+
+.like-button .icon{
+    padding: 5px;
+}
+
+.remove-button{
+    padding:  0;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color:#404040;
+}
+
+.remove-button:hover , .remove-button:focus{
+    box-shadow: 5px 5px rgba(0, 0, 0, 0.4);
+}
+
+.remove-button .icon{
+    padding: 5px 8px;
 }
 
 .error-message{
@@ -125,9 +166,9 @@ button{
 
 .close-button{
     padding:  0 3px;  
-    color: #404040
+    color: #eb3455;
 }
 
 .close-button:hover, .close-button:focus {
-    color: #eb3455;
+    color: #404040;
 }
