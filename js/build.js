@@ -6,123 +6,144 @@
             require('../../modules/class'),
             require('../../modules/props'),
             require('../../modules/style'),
-            require('../../modules/eventlisteners'),
+            require('../../modules/eventlisteners')
         ]),
         h = require('../../h.js'),
         vnode,
         data = [],
-        error = false;
-
-    var fetchCb = function(json){
-        if(json.message == "Not Found") {
-            error = true;
-        }
-        else{
-            error = false;
-            data.push({user: json.login , imgsrc: json.avatar_url , repos: json.public_repos})
-        }
-    }
-    
-    var fetchGh = function(url){
-        var result = fetch(url);
-        result.then(function(response) {
-            return response.json();
-        }).then(fetchCb)
-            .then(render)
-            .catch(function(ex) {
-            console.log('parsing failed', ex)
-        })  
-
-    }
-
-    var fetchUser = function(e){
-        e.preventDefault();
-        var query = document.querySelector(".fetch-input");
-        var username = query.value;
-        var requri   = 'https://api.github.com/users/'+username;    
-        fetchGh(requri);
-        query.value = "";
-    }
-
-    var toggleLike = function(e){
-        e.preventDefault();
-        e.target.classList.toggle('like')
-    }
-
-    var removeErrormsg = function(){
-        error = false;
-        render();        
-    }
-
-    var writeInput = function(e){
-        var queryName =document.querySelector('.query-name');
-        var queryInput = e.target;
-        queryName.innerHTML = queryInput.value;
-    }
-    
-    var viewTicket = function(ticket){
-        return h('li.user-ticket',[
-            h('img.user-avatar', {props: {src:ticket.imgsrc}}),
-            h('div.user-data',[
-                h('p','User-Name:' + ticket.user),
-                h('p','Public Repositories:' + ticket.repos),
-            ]),
-            h('button.like-button',[
-                h('i.fa.fa-heart.unlike.icon' ,{on: {click: toggleLike}})
-            ])
-        ])
-    }
-
-    var viewError = function(){
-        var query= document.querySelector('.fetch-input');
-        return [h('form.fetch-form', [
-            h('input.fetch-input', {on: {input: writeInput} , props: {type: 'text', placeholder:'Enter a gitHub username...'}}),
-            h('button.fetch-btn',{on: {click: fetchUser}},'Fetch!')
-        ]),
-                h('div.fetch-message', [
-                    h('h2.fetch-title','Hold tight!'),
-                    h('span','We are about to fetch '),
-                    h('span.query-name')  
-                ]),
-                h('ul.users-list', data.map(viewTicket)),
-                h('div.error-message.clearfix',[
-                    h('span', 'Oops! there is no such username :('),
-                    h('button.close-button', {on: {click: removeErrormsg}},[
-                        h('i.fa.fa-times.icon')
+        error = false,
+		fetchCb = function(json){
+			if(json.message == "Not Found") {
+				error = true;
+			} else{
+				error = false;
+				data.push({user: json.login, url: json.html_url, imgsrc: json.avatar_url, repos: json.public_repos})
+			}
+		},
+		fetchGh = function(url){
+			fetch(url)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(fetchCb)
+                .then(render)
+                .catch(function(ex) {
+                    console.log('parsing failed', ex)
+                })
+		},
+		fetchUser = function(e){
+			var query = document.querySelector(".fetch-input"),
+                username = query.value,
+                requri = 'https://api.github.com/users/'+username;
+			fetchGh(requri);
+			query.value = "";
+            e.preventDefault();
+        },
+		toggleLike = function(e){
+			e.target.classList.toggle('like');
+		},
+        removeTicket = function(e){
+            var tormTicket = e.target.parentNode.value,
+                ticketIndex;
+            for(var i=0 ; i < data.length ; i++){
+                if(data[i].user.indexOf(tormTicket) != -1){
+                    ticketIndex = i;
+                };
+            };
+            data.splice(ticketIndex , 1);
+            render();
+        },
+		removeErrormsg = function(){
+			error = false;
+			render();
+		},
+		writeInput = function(e){
+            document.querySelector('.query-name').innerHTML = e.target.value;
+		},
+		viewTicket = function(ticket){
+            var result = h('li.user-ticket',{
+                                style: {opacity: '0', transition: 'opacity 0.5s',delayed: {opacity: '1'}}
+                                }, [
+                            h('img.user-avatar', {props: {src: ticket.imgsrc}}),
+                            h('ul.user-data', [
+                                h('li.user-detail', 'User-Name:' + ticket.user),
+                                h('li.user-detail', 'Public Repositories:' + ticket.repos),
+                                h('li.user-detail', [
+                                    h('a.user-link', {props: {href: ticket.url, target: '_blank'}}, 'Checkout User')
+                                ]),  
+                            ]),
+                            h('button.like-button.unlike', {
+                                on: {click: toggleLike}
+                            }, [h('i.fa.fa-heart.icon')]),
+                            h('button.remove-button', {
+                                props: {value: ticket.user},
+                                on: { click: removeTicket }
+                            }, [h('i.fa.fa-times.icon')])
+                         ]);
+            return result;
+		},
+		viewError = function(){
+			var result = [
+                    h('form.fetch-form', [
+                        h('input.fetch-input', {
+                            on: { input: writeInput },
+                            props: { type: 'text', placeholder: 'Enter a gitHub username...' }
+                        }),
+                        h('button.fetch-btn', {
+                            on: { click: fetchUser }
+                        }, 'Fetch!')
+                    ]),
+                    h('div.fetch-message', [
+                        h('h2.fetch-title', 'Hold tight!'),
+                        h('span', 'We are about to fetch '),
+                        h('span.query-name')
+                    ]),
+                    h('ul.users-list', data.map(viewTicket)),
+                    h('div.error-message.clearfix',{
+                            style: {opacity: '0', transition: 'opacity 0.5s', delayed: {opacity: '1'}}
+                            }, [
+                        h('span', 'Oops! there is no such username :('),
+                        h('button.close-button', {
+                            on: { click: removeErrormsg }
+                        }, [h('i.fa.fa-times.icon')])
                     ])
-                ])];  
-
-    }
-
-    var viewList = function(){
-        return [h('form.fetch-form', [
-            h('input.fetch-input', {on: {input: writeInput} , props: {type: 'text', placeholder:'Enter a gitHub username...'}}),
-            h('button.fetch-btn',{on: {click: fetchUser}},'Fetch!')
-        ]),
-                h('div.fetch-message', [
-                    h('h2.fetch-title','Hold tight!'),
-                    h('span','We are about to fetch '),
-                    h('span.query-name')  
+                ];
+			return result;
+        },
+        viewList = function(){
+            var result = [
+                h('form.fetch-form', [
+                    h('input.fetch-input', {
+                        on: { input: writeInput },
+                        props: { type: 'text', placeholder: 'Enter a gitHub username...' }
+                    }),
+                    h('button.fetch-btn', {
+                        on: { click: fetchUser }
+                    }, 'Fetch!')
                 ]),
-                h('ul.users-list', data.map(viewTicket))];  
-
-    }
-
-    var view = function (data) {
-
-        return h('section.container', error ? viewError(data) : viewList(data));  
-    }
-    
-    var render = function(){
-        vnode = patch(vnode, view(data)); 
-    }
+                h('div.fetch-message', [
+                    h('h2.fetch-title', 'Hold tight!'),
+                    h('span', 'We are about to fetch '),
+                    h('span.query-name')
+                ]),
+                h('ul.users-list', data.map(viewTicket))
+            ];
+            return result;
+        },
+        view = function (data) {
+            return h('section.container', error ? viewError(data) : viewList(data));
+        },
+        render = function() {
+            localStorage.setItem('data' , JSON.stringify(data));
+            vnode = patch(vnode, view(data));
+        }
 
     window.addEventListener('DOMContentLoaded', function () {
+        data = JSON.parse(localStorage.getItem('data')) || {};
         var container = document.querySelector('.container');
         vnode = patch(container, view(data));
         render();
     });
-    
 },
 
 {"../../h.js":2,"../../modules/class":4,"../../modules/eventlisteners":5,"../../modules/props":6,"../../modules/style":7,"../../snabbdom.js":8}],2:[function(require,module,exports){
@@ -573,6 +594,3 @@
     };
 
 },{}]},{},[1]);
-
-
-
